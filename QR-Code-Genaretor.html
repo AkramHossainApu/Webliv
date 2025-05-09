@@ -1,219 +1,208 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>WebLiv | QR Tools</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Poppins', sans-serif;
-      }
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background-color: #101c27;
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebLiv | QR Code Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #101c27;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .back-button a:hover {
+      background-color: #c0392b;
+    }
+
+    .container {
+      background: #ffffff;
+      color: #000;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 100%;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .container h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .container p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+      transition: box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+    }
+
+    button.generate-btn, button#downloadLink {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    button.generate-btn {
+      background-color: #3498db;
+    }
+
+    button.generate-btn:hover {
+      background-color: #2980b9;
+    }
+
+    button#downloadLink {
+      background-color: #2ecc71;
+      display: none;
+    }
+
+    button#downloadLink:hover {
+      background-color: #27ae60;
+    }
+
+    .qr-code {
+      margin-top: 20px;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .qr-code img {
+      max-width: 200px;
+      width: 100%;
+    }
+
+    @media (max-width: 480px) {
+      .container {
         padding: 20px;
       }
-      .back-button {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 999;
+
+      button.generate-btn,
+      button#downloadLink {
+        font-size: 15px;
+        padding: 12px;
       }
-      .back-button a {
-        text-decoration: none;
-        background-color: #e74c3c;
-        color: #fff;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-size: 16px;
-        transition: background 0.3s ease;
-      }
-      .back-button a:hover {
-        background-color: #c0392b;
-      }
-      .wrapper {
-        height: 265px;
-        max-width: 410px;
-        background: #fff;
-        border-radius: 7px;
-        padding: 20px 25px 0;
-        transition: height 0.2s ease;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      }
-      .wrapper.active {
-        height: 580px;
-      }
-      header h1 {
-        font-size: 21px;
-        font-weight: 500;
-      }
-      header p {
-        margin-top: 5px;
-        color: #575757;
-        font-size: 16px;
-      }
-      .form {
-        margin: 20px 0 25px;
-      }
-      .form input,
-      .form button {
-        width: 100%;
-        height: 55px;
-        border: none;
-        outline: none;
-        border-radius: 5px;
-        font-size: 17px;
-        transition: 0.1s ease;
-      }
-      .form input {
-        padding: 0 17px;
-        font-size: 18px;
-        border: 1px solid #999;
-      }
-      .form input:focus {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.13);
-      }
-      .form input::placeholder {
-        color: #999;
-      }
-      .form button {
-        margin-top: 20px;
-        background: #3498db;
-        color: #fff;
-        cursor: pointer;
-      }
-      .qr-code {
-        opacity: 0;
-        display: flex;
-        padding: 33px 0;
-        border-radius: 5px;
-        align-items: center;
-        pointer-events: none;
-        justify-content: center;
-        border: 1px solid #ccc;
-      }
-      .wrapper.active .qr-code {
-        opacity: 1;
-        pointer-events: auto;
-        transition: opacity 0.5s 0.05s ease;
-      }
-      .qr-code img {
-        width: 170px;
-      }
-      .download-button {
-        display: none;
-        margin-top: 15px;
-        text-align: center;
-      }
-      .download-button button {
-        width: 100%;
-        background-color: #2ecc71;
-        color: white;
-        height: 55px;
-        border: none;
-        border-radius: 5px;
-        font-size: 17px;
-        cursor: pointer;
-      }
-      @media (max-width: 430px) {
-        .wrapper {
-          height: 255px;
-          padding: 16px 20px;
-        }
-        .wrapper.active {
-          height: 560px;
-        }
-        .form input,
-        .form button {
-          height: 52px;
-        }
-        .qr-code img {
-          width: 160px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="back-button">
-      <a href="http://www.webliv.work.gd">&#8592; Back to Home</a>
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-button">
+    <a href="http://www.webliv.work.gd">&#8592; Back to Home</a>
+  </div>
+
+  <div class="container">
+    <h1>QR Code Generator</h1>
+    <p>Enter text or URL to generate your QR code</p>
+
+    <input type="text" id="qrInput" placeholder="Type something...">
+    <button class="generate-btn">Generate QR Code</button>
+
+    <div class="qr-code">
+      <img src="" alt="QR Code" id="qrImage">
     </div>
 
-    <div class="wrapper">
-      <header>
-        <h1>QR Code Generator</h1>
-        <p>Paste a url or enter text to create QR code</p>
-      </header>
-      <div class="form">
-        <input type="text" spellcheck="false" placeholder="Enter text or url">
-        <button>Generate QR Code</button>
-      </div>
-      <div class="qr-code">
-        <img src="" alt="qr-code">
-      </div>
-      <div class="download-button">
-        <button id="downloadLink">Download QR Code</button>
-      </div>
-    </div>
+    <button id="downloadLink">Download QR Code</button>
+  </div>
 
-    <script>
-      const wrapper = document.querySelector(".wrapper"),
-        qrInput = wrapper.querySelector(".form input"),
-        generateBtn = wrapper.querySelector(".form button"),
-        qrImg = wrapper.querySelector(".qr-code img"),
-        downloadDiv = wrapper.querySelector(".download-button"),
-        downloadLink = document.getElementById("downloadLink");
+  <script>
+    const input = document.getElementById('qrInput');
+    const generateBtn = document.querySelector('.generate-btn');
+    const qrCodeDiv = document.querySelector('.qr-code');
+    const qrImg = document.getElementById('qrImage');
+    const downloadBtn = document.getElementById('downloadLink');
+    let qrURL = "";
 
-      let preValue, qrURL;
+    generateBtn.addEventListener('click', () => {
+      const value = input.value.trim();
+      if (!value) return alert("Please enter text or URL");
 
-      generateBtn.addEventListener("click", () => {
-        let qrValue = qrInput.value.trim();
-        if (!qrValue || preValue === qrValue) return;
-        preValue = qrValue;
-        generateBtn.innerText = "Generating QR Code...";
-        qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrValue)}`;
-        qrImg.src = qrURL;
-        qrImg.addEventListener("load", () => {
-          wrapper.classList.add("active");
-          generateBtn.innerText = "Generate QR Code";
-          downloadDiv.style.display = "block";
+      qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(value)}`;
+      qrImg.src = qrURL;
 
-          downloadLink.onclick = async function (e) {
-            e.preventDefault();
-            try {
-              const response = await fetch(qrURL);
-              const blob = await response.blob();
-              const objectURL = URL.createObjectURL(blob);
+      qrImg.onload = () => {
+        qrCodeDiv.style.display = 'flex';
+        downloadBtn.style.display = 'block';
+      };
+    });
 
-              const a = document.createElement("a");
-              a.href = objectURL;
-              const filename = `${qrValue.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.png`;
-              a.download = filename;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              URL.revokeObjectURL(objectURL);
-            } catch (err) {
-              alert("Failed to download QR code.");
-            }
-          };
-        });
-      });
+    downloadBtn.addEventListener('click', async () => {
+      try {
+        const response = await fetch(qrURL);
+        const blob = await response.blob();
+        const objectURL = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = objectURL;
+        const safeName = input.value.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        link.download = `${safeName || "qr_code"}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(objectURL);
+      } catch (error) {
+        alert("Error downloading the QR code.");
+      }
+    });
 
-      qrInput.addEventListener("keyup", () => {
-        if (!qrInput.value.trim()) {
-          wrapper.classList.remove("active");
-          preValue = "";
-          downloadDiv.style.display = "none";
-        }
-      });
-    </script>
-  </body>
+    input.addEventListener('input', () => {
+      if (!input.value.trim()) {
+        qrCodeDiv.style.display = 'none';
+        downloadBtn.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
 </html>
