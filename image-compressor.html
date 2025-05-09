@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WebLiv | Image Compressor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
     * {
       margin: 0;
       padding: 0;
@@ -13,74 +13,89 @@
       font-family: 'Poppins', sans-serif;
     }
     body {
-      background-color: #101c27;
-      color: #fff;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
       padding: 20px;
+      color: #fff;
     }
     .back-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 999;
+      align-self: flex-start;
+      margin: 10px 0;
     }
     .back-button a {
       text-decoration: none;
-      background-color: #e74c3c;
+      background: #e74c3c;
       color: #fff;
       padding: 10px 20px;
       border-radius: 5px;
-      font-size: 16px;
-      transition: background 0.3s ease;
+      transition: 0.3s;
     }
     .back-button a:hover {
-      background-color: #c0392b;
+      background: #c0392b;
     }
     .container {
-      background: #fff;
-      color: #000;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
       padding: 25px;
-      border-radius: 10px;
-      max-width: 450px;
+      border-radius: 15px;
+      max-width: 500px;
       width: 100%;
-      margin-top: 80px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
       text-align: center;
+      margin-top: 30px;
     }
     h1 {
-      margin-bottom: 10px;
-      font-size: 22px;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    label.custom-upload {
+      display: block;
+      padding: 25px;
+      border: 2px dashed #aaa;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #ddd;
+      margin-bottom: 20px;
+      transition: background 0.3s;
+    }
+    label.custom-upload:hover {
+      background: rgba(255,255,255,0.1);
     }
     input[type="file"] {
       display: none;
     }
-    .custom-file-upload {
-      border: 2px dashed #ccc;
-      padding: 20px;
-      cursor: pointer;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    img {
+    #preview {
       max-width: 100%;
-      margin-top: 20px;
       border-radius: 10px;
+      margin-top: 20px;
+      display: none;
     }
     .download {
-      display: none;
       margin-top: 20px;
+      display: none;
     }
     .download a {
       background: #2ecc71;
       color: white;
-      padding: 12px 20px;
-      border-radius: 5px;
+      padding: 12px 25px;
       text-decoration: none;
-      font-weight: 500;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .download a:hover {
+      background: #27ae60;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px 15px;
+      }
+      h1 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
@@ -91,14 +106,12 @@
 
   <div class="container">
     <h1>Image Compressor</h1>
-    <label class="custom-file-upload">
-      <input type="file" accept="image/*" id="imageInput"/>
-      Click to select image
-    </label>
+    <label class="custom-upload" for="imageInput">Click here to choose image</label>
+    <input type="file" accept="image/*" id="imageInput"/>
     <canvas id="canvas" style="display:none;"></canvas>
-    <img id="preview" alt="" />
+    <img id="preview" />
     <div class="download">
-      <a id="downloadLink" download="compressed-image.jpg">Download Compressed Image</a>
+      <a id="downloadLink" download>Download Compressed Image</a>
     </div>
   </div>
 
@@ -113,30 +126,35 @@
       const file = this.files[0];
       if (!file) return;
 
+      const originalName = file.name.split('.').slice(0, -1).join('.');
+      const extension = file.name.split('.').pop().toLowerCase();
       const reader = new FileReader();
+
       reader.onload = function (event) {
         const img = new Image();
         img.src = event.target.result;
 
         img.onload = function () {
-          const MAX_WIDTH = 800;
-          const scaleSize = MAX_WIDTH / img.width;
-          const width = MAX_WIDTH;
-          const height = img.height * scaleSize;
-
-          canvas.width = width;
-          canvas.height = height;
-
+          canvas.width = img.width;
+          canvas.height = img.height;
           const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
+          ctx.drawImage(img, 0, 0, img.width, img.height);
 
-          // Compress the image to 0.6 quality
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+          const isPng = extension === 'png';
+          const outputFormat = isPng ? 'image/webp' : 'image/jpeg';
+          const outputExt = isPng ? 'webp' : 'jpg';
+
+          const compressedDataUrl = canvas.toDataURL(outputFormat, 0.4);
+
           preview.src = compressedDataUrl;
+          preview.style.display = 'block';
+
           downloadLink.href = compressedDataUrl;
+          downloadLink.download = `${originalName} (Compressed).${outputExt}`;
           downloadDiv.style.display = 'block';
         };
       };
+
       reader.readAsDataURL(file);
     });
   </script>
