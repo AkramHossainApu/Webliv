@@ -61,38 +61,12 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       resize: none;
-      outline: none;
-      margin-bottom: 15px;
     }
-
-    .voice-list {
-      max-height: 200px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
-      background-color: #f9f9f9;
-    }
-
-    .voice-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .voice-item:last-child {
-      border-bottom: none;
-    }
-
-    .voice-label {
-      font-size: 15px;
-    }
-
-    .mic-button {
-      background: #3498db;
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 15px;
+      background-color: #3498db;
       border: none;
       border-radius: 5px;
       color: #fff;
@@ -155,34 +129,28 @@
     const downloadBtn = document.getElementById('download-btn');
     const micBtn = document.getElementById('mic-btn');
     const textInput = document.getElementById('text-input');
-    const voiceList = document.getElementById('voiceList');
+    const voiceSelect = document.getElementById('voice-select');
+    let selectedVoice = voiceSelect.value;
+    
+    // Function to speak the text
+    function speakText(text, voice) {
+      responsiveVoice.speak(text, voice, {
+        onstart: () => {
+          speakBtn.innerHTML = "Speaking...";
+        },
+        onend: () => {
+          speakBtn.innerHTML = "Speak";
+        }
+      });
+    }
 
-    let voices = [];
-
-    function renderVoices() {
-      voices = speechSynthesis.getVoices();
-      voiceList.innerHTML = '';
-
-      voices.forEach((voice, index) => {
-        const item = document.createElement('div');
-        item.className = 'voice-item';
-
-        const label = document.createElement('span');
-        label.className = 'voice-label';
-        label.textContent = `${voice.name} (${voice.lang})${voice.default ? " — Default" : ""}`;
-
-        const micBtn = document.createElement('button');
-        micBtn.className = 'mic-button';
-        micBtn.innerHTML = '🎤 Try';
-        micBtn.onclick = () => {
-          const utterance = new SpeechSynthesisUtterance(`Hello! I am ${voice.name}.`);
-          utterance.voice = voice;
-          speechSynthesis.speak(utterance);
-        };
-
-        item.appendChild(label);
-        item.appendChild(micBtn);
-        voiceList.appendChild(item);
+    // Function to download the speech audio as an MP3 (for ResponsiveVoice API Premium)
+    function downloadAudio(text, voice) {
+      responsiveVoice.speak(text, voice, {
+        onend: () => {
+          // To simulate download, we would normally integrate with a paid API that supports file export
+          alert('Audio is ready to download (requires premium API).');
+        }
       });
     }
 
@@ -194,20 +162,31 @@
         downloadBtn.style.display = "block"; // Show download button after speaking
       } else {
         alert('Please enter some text to speak.');
-        return;
       }
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      // Default to first voice if available
-      if (voices.length > 0) {
-        utterance.voice = voices[0];
-      }
-
-      speechSynthesis.speak(utterance);
     });
 
-    // Load voices when ready
-    speechSynthesis.onvoiceschanged = renderVoices;
+    // Event listener for 'Download' button
+    downloadBtn.addEventListener('click', () => {
+      const text = textInput.value.trim();
+      if (text !== '') {
+        downloadAudio(text, selectedVoice);
+      }
+    });
+
+    // Event listener for 'Voice Selection' dropdown
+    voiceSelect.addEventListener('change', (e) => {
+      selectedVoice = e.target.value;
+    });
+
+    // Event listener for 'Mic Preview' button
+    micBtn.addEventListener('click', () => {
+      const text = textInput.value.trim();
+      if (text !== '') {
+        speakText(text, selectedVoice);
+      } else {
+        alert('Please enter some text to preview.');
+      }
+    });
   </script>
 </body>
 </html>
