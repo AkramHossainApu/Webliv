@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WebLiv | Image Compressor</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background-color: #101c27;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 999;
+    }
+    .back-button a {
+      text-decoration: none;
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    .back-button a:hover {
+      background-color: #c0392b;
+    }
+    .container {
+      background: #fff;
+      color: #000;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 450px;
+      width: 100%;
+      margin-top: 80px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .custom-file-upload {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      cursor: pointer;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .download {
+      display: none;
+      margin-top: 20px;
+    }
+    .download a {
+      background: #2ecc71;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="back-button">
+    <a href="http://www.webliv.work.gd">&#8592; Back to Home</a>
+  </div>
+
+  <div class="container">
+    <h1>Image Compressor</h1>
+    <label class="custom-file-upload">
+      <input type="file" accept="image/*" id="imageInput"/>
+      Click to select image
+    </label>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <img id="preview" alt="" />
+    <div class="download">
+      <a id="downloadLink" download="compressed-image.jpg">Download Compressed Image</a>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    const canvas = document.getElementById('canvas');
+    const downloadLink = document.getElementById('downloadLink');
+    const downloadDiv = document.querySelector('.download');
+
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+          const MAX_WIDTH = 800;
+          const scaleSize = MAX_WIDTH / img.width;
+          const width = MAX_WIDTH;
+          const height = img.height * scaleSize;
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Compress the image to 0.6 quality
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.6);
+          preview.src = compressedDataUrl;
+          downloadLink.href = compressedDataUrl;
+          downloadDiv.style.display = 'block';
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
