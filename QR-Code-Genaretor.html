@@ -22,8 +22,10 @@
         padding: 20px;
       }
       .back-button {
-        align-self: flex-start;
-        margin-bottom: 20px;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 999;
       }
       .back-button a {
         text-decoration: none;
@@ -141,7 +143,7 @@
   </head>
   <body>
     <div class="back-button">
-      <a href="index.html">&#8592; Back to Home</a>
+      <a href="http://www.webliv.work.gd">&#8592; Back to Home</a>
     </div>
 
     <div class="wrapper">
@@ -162,26 +164,26 @@
     </div>
 
     <script>
-      const wrapper = document.querySelector('.wrapper'),
-        qrInput = wrapper.querySelector('.form input'),
-        generateBtn = wrapper.querySelector('.form button'),
-        qrImg = wrapper.querySelector('.qr-code img'),
-        downloadDiv = wrapper.querySelector('.download-button'),
-        downloadLink = document.getElementById('downloadLink');
+      const wrapper = document.querySelector(".wrapper"),
+        qrInput = wrapper.querySelector(".form input"),
+        generateBtn = wrapper.querySelector(".form button"),
+        qrImg = wrapper.querySelector(".qr-code img"),
+        downloadDiv = wrapper.querySelector(".download-button"),
+        downloadLink = document.getElementById("downloadLink");
 
       let preValue, qrURL;
 
-      generateBtn.addEventListener('click', () => {
+      generateBtn.addEventListener("click", () => {
         let qrValue = qrInput.value.trim();
         if (!qrValue || preValue === qrValue) return;
         preValue = qrValue;
-        generateBtn.innerText = 'Generating QR Code...';
+        generateBtn.innerText = "Generating QR Code...";
         qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrValue)}`;
         qrImg.src = qrURL;
-        qrImg.addEventListener('load', () => {
-          wrapper.classList.add('active');
-          generateBtn.innerText = 'Generate QR Code';
-          downloadDiv.style.display = 'block';
+        qrImg.addEventListener("load", () => {
+          wrapper.classList.add("active");
+          generateBtn.innerText = "Generate QR Code";
+          downloadDiv.style.display = "block";
 
           downloadLink.onclick = async function (e) {
             e.preventDefault();
@@ -190,7 +192,7 @@
               const blob = await response.blob();
               const objectURL = URL.createObjectURL(blob);
 
-              const a = document.createElement('a');
+              const a = document.createElement("a");
               a.href = objectURL;
               const filename = `${qrValue.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.png`;
               a.download = filename;
@@ -199,17 +201,17 @@
               document.body.removeChild(a);
               URL.revokeObjectURL(objectURL);
             } catch (err) {
-              alert('Failed to download QR code.');
+              alert("Failed to download QR code.");
             }
           };
         });
       });
 
-      qrInput.addEventListener('keyup', () => {
+      qrInput.addEventListener("keyup", () => {
         if (!qrInput.value.trim()) {
-          wrapper.classList.remove('active');
-          preValue = '';
-          downloadDiv.style.display = 'none';
+          wrapper.classList.remove("active");
+          preValue = "";
+          downloadDiv.style.display = "none";
         }
       });
     </script>
