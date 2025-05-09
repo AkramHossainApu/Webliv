@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home | QR Tools</title>
+  <title>WebLiv</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       margin: 0;
@@ -32,15 +33,23 @@
       color: #fff;
       font-size: 18px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       transition: background 0.3s ease;
     }
     .button:hover {
       background-color: #2980b9;
     }
+    .button i {
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="logo"></div>
-  <button class="button" onclick="window.location.href='QR-Code-Genaretor.html'">QR Code Generator</button>
+  <button class="button" onclick="window.location.href='QR-Code-Genaretor.html'">
+    <i class="fas fa-qrcode"></i> QR Code Generator
+  </button>
 </body>
 </html>
