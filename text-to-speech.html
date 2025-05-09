@@ -89,10 +89,15 @@
       align-items: center;
       padding: 8px;
       border-bottom: 1px solid #ddd;
+      cursor: pointer;
     }
 
     .voice-item:last-child {
       border-bottom: none;
+    }
+
+    .voice-item.selected {
+      background-color: #d0ebff;
     }
 
     .voice-label {
@@ -162,6 +167,11 @@
     const voiceList = document.getElementById('voiceList');
 
     let voices = [];
+    let selectedVoice = null;
+
+    function stopAllSpeech() {
+      speechSynthesis.cancel();
+    }
 
     function renderVoices() {
       voices = speechSynthesis.getVoices();
@@ -170,7 +180,7 @@
       voices.forEach((voice, index) => {
         const item = document.createElement('div');
         item.className = 'voice-item';
-
+        
         const label = document.createElement('span');
         label.className = 'voice-label';
         label.textContent = `${voice.name} (${voice.lang})${voice.default ? " — Default" : ""}`;
@@ -178,10 +188,18 @@
         const micBtn = document.createElement('button');
         micBtn.className = 'mic-button';
         micBtn.innerHTML = '🎤 Try';
-        micBtn.onclick = () => {
+        micBtn.onclick = (e) => {
+          e.stopPropagation();
+          stopAllSpeech();
           const utterance = new SpeechSynthesisUtterance(`Hello! I am ${voice.name}.`);
           utterance.voice = voice;
           speechSynthesis.speak(utterance);
+        };
+
+        item.onclick = () => {
+          document.querySelectorAll('.voice-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedVoice = voice;
         };
 
         item.appendChild(label);
@@ -197,16 +215,14 @@
         return;
       }
 
+      stopAllSpeech();
       const utterance = new SpeechSynthesisUtterance(text);
-      // Default to first voice if available
-      if (voices.length > 0) {
-        utterance.voice = voices[0];
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
       }
-
       speechSynthesis.speak(utterance);
     });
 
-    // Load voices when ready
     speechSynthesis.onvoiceschanged = renderVoices;
   </script>
 
