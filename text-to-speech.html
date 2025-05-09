@@ -50,7 +50,7 @@
       color: #333;
       padding: 30px;
       border-radius: 12px;
-      max-width: 500px;
+      max-width: 550px;
       width: 100%;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
@@ -73,20 +73,53 @@
       margin-bottom: 15px;
     }
 
-    select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
+    .voice-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      font-size: 16px;
-      margin-bottom: 15px;
-      outline: none;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #f9f9f9;
     }
 
-    button {
+    .voice-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .voice-item:last-child {
+      border-bottom: none;
+    }
+
+    .voice-label {
+      font-size: 15px;
+    }
+
+    .mic-button {
+      background: #3498db;
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mic-button:hover {
+      background-color: #2980b9;
+    }
+
+    button#speak-btn {
       width: 100%;
       padding: 15px;
-      background-color: #3498db;
+      background-color: #2ecc71;
       border: none;
       border-radius: 8px;
       color: #fff;
@@ -95,18 +128,13 @@
       transition: background 0.3s ease;
     }
 
-    button:hover {
-      background-color: #2980b9;
+    button#speak-btn:hover {
+      background-color: #27ae60;
     }
 
     @media (max-width: 500px) {
       .container {
         padding: 20px;
-      }
-
-      button {
-        font-size: 16px;
-        padding: 14px;
       }
     }
   </style>
@@ -120,32 +148,47 @@
   <div class="container">
     <h1>Text to Speech Converter</h1>
     <textarea id="text-input" placeholder="Enter text here..."></textarea>
-    <select id="voiceSelect">
-      <option disabled selected>Loading voices...</option>
-    </select>
+    
+    <div class="voice-list" id="voiceList">
+      <p style="text-align: center;">Loading voices...</p>
+    </div>
+
     <button id="speak-btn">Speak</button>
   </div>
 
   <script>
     const speakBtn = document.getElementById('speak-btn');
     const textInput = document.getElementById('text-input');
-    const voiceSelect = document.getElementById('voiceSelect');
+    const voiceList = document.getElementById('voiceList');
 
     let voices = [];
 
-    function loadVoices() {
+    function renderVoices() {
       voices = speechSynthesis.getVoices();
-      voiceSelect.innerHTML = '';
+      voiceList.innerHTML = '';
+
       voices.forEach((voice, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${voice.name} (${voice.lang})${voice.default ? " — Default" : ""}`;
-        voiceSelect.appendChild(option);
+        const item = document.createElement('div');
+        item.className = 'voice-item';
+
+        const label = document.createElement('span');
+        label.className = 'voice-label';
+        label.textContent = `${voice.name} (${voice.lang})${voice.default ? " — Default" : ""}`;
+
+        const micBtn = document.createElement('button');
+        micBtn.className = 'mic-button';
+        micBtn.innerHTML = '🎤 Try';
+        micBtn.onclick = () => {
+          const utterance = new SpeechSynthesisUtterance(`Hello! I am ${voice.name}.`);
+          utterance.voice = voice;
+          speechSynthesis.speak(utterance);
+        };
+
+        item.appendChild(label);
+        item.appendChild(micBtn);
+        voiceList.appendChild(item);
       });
     }
-
-    // Load voices when available
-    speechSynthesis.onvoiceschanged = loadVoices;
 
     speakBtn.addEventListener('click', () => {
       const text = textInput.value.trim();
@@ -155,13 +198,16 @@
       }
 
       const utterance = new SpeechSynthesisUtterance(text);
-      const selectedVoice = voices[voiceSelect.value];
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
+      // Default to first voice if available
+      if (voices.length > 0) {
+        utterance.voice = voices[0];
       }
 
       speechSynthesis.speak(utterance);
     });
+
+    // Load voices when ready
+    speechSynthesis.onvoiceschanged = renderVoices;
   </script>
 
 </body>
