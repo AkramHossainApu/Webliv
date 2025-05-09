@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WebLiv | Text to Speech with Download</title>
+  <title>WebLiv | Text to Speech</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
     * {
@@ -12,6 +12,7 @@
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
+
     body {
       background-color: #101c27;
       color: #fff;
@@ -22,12 +23,14 @@
       min-height: 100vh;
       padding: 20px;
     }
+
     .back-button {
       position: fixed;
       top: 20px;
       left: 20px;
       z-index: 999;
     }
+
     .back-button a {
       text-decoration: none;
       background-color: #e74c3c;
@@ -37,156 +40,191 @@
       font-size: 16px;
       transition: background 0.3s ease;
     }
+
     .back-button a:hover {
       background-color: #c0392b;
     }
+
     .container {
       background: #fff;
       color: #333;
       padding: 30px;
-      border-radius: 10px;
-      max-width: 500px;
+      border-radius: 12px;
+      max-width: 550px;
       width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
+
     h1 {
       text-align: center;
       margin-bottom: 20px;
+      font-size: 24px;
     }
+
     textarea {
       width: 100%;
       height: 150px;
       padding: 15px;
       font-size: 16px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 8px;
       resize: none;
+      outline: none;
+      margin-bottom: 15px;
     }
-    button {
-      margin-top: 20px;
+
+    .voice-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .voice-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+
+    .voice-item:last-child {
+      border-bottom: none;
+    }
+
+    .voice-item.selected {
+      background-color: #d0ebff;
+    }
+
+    .voice-label {
+      font-size: 15px;
+    }
+
+    .mic-button {
+      background: #3498db;
+      border: none;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .mic-button:hover {
+      background-color: #2980b9;
+    }
+
+    button#speak-btn {
       width: 100%;
       padding: 15px;
-      background-color: #3498db;
+      background-color: #2ecc71;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       color: #fff;
       font-size: 18px;
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    button:hover {
-      background-color: #2980b9;
-    }
-    .voice-select {
-      width: 100%;
-      margin-top: 20px;
-      padding: 12px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .mic-button {
-      cursor: pointer;
-      padding: 10px;
-      background-color: #2ecc71;
-      border-radius: 50%;
-      color: white;
-      font-size: 18px;
-      border: none;
-      transition: background 0.3s ease;
-    }
-    .mic-button:hover {
+
+    button#speak-btn:hover {
       background-color: #27ae60;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
+
   <div class="back-button">
     <a href="http://www.webliv.work.gd">&#8592; Back to Home</a>
   </div>
+
   <div class="container">
-    <h1>Text to Speech with Voice Selection</h1>
-    
+    <h1>Text to Speech Converter</h1>
     <textarea id="text-input" placeholder="Enter text here..."></textarea>
     
-    <select id="voice-select" class="voice-select">
-      <option value="en-US">English (US)</option>
-      <option value="en-GB">English (UK)</option>
-      <option value="es-ES">Spanish (Spain)</option>
-      <option value="fr-FR">French</option>
-      <!-- Add more options here -->
-    </select>
-    
+    <div class="voice-list" id="voiceList">
+      <p style="text-align: center;">Loading voices...</p>
+    </div>
+
     <button id="speak-btn">Speak</button>
-    <button id="download-btn" style="display: none;">Download Audio</button>
-    
-    <button class="mic-button" id="mic-btn">🔊</button>
   </div>
-  
-  <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_API_KEY"></script>
+
   <script>
     const speakBtn = document.getElementById('speak-btn');
-    const downloadBtn = document.getElementById('download-btn');
-    const micBtn = document.getElementById('mic-btn');
     const textInput = document.getElementById('text-input');
-    const voiceSelect = document.getElementById('voice-select');
-    let selectedVoice = voiceSelect.value;
-    
-    // Function to speak the text
-    function speakText(text, voice) {
-      responsiveVoice.speak(text, voice, {
-        onstart: () => {
-          speakBtn.innerHTML = "Speaking...";
-        },
-        onend: () => {
-          speakBtn.innerHTML = "Speak";
-        }
+    const voiceList = document.getElementById('voiceList');
+
+    let voices = [];
+    let selectedVoice = null;
+
+    function stopAllSpeech() {
+      speechSynthesis.cancel();
+    }
+
+    function renderVoices() {
+      voices = speechSynthesis.getVoices();
+      voiceList.innerHTML = '';
+
+      voices.forEach((voice, index) => {
+        const item = document.createElement('div');
+        item.className = 'voice-item';
+        
+        const label = document.createElement('span');
+        label.className = 'voice-label';
+        label.textContent = `${voice.name} (${voice.lang})${voice.default ? " — Default" : ""}`;
+
+        const micBtn = document.createElement('button');
+        micBtn.className = 'mic-button';
+        micBtn.innerHTML = '🎤 Try';
+        micBtn.onclick = (e) => {
+          e.stopPropagation();
+          stopAllSpeech();
+          const utterance = new SpeechSynthesisUtterance(`Hello! I am ${voice.name}.`);
+          utterance.voice = voice;
+          speechSynthesis.speak(utterance);
+        };
+
+        item.onclick = () => {
+          document.querySelectorAll('.voice-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedVoice = voice;
+        };
+
+        item.appendChild(label);
+        item.appendChild(micBtn);
+        voiceList.appendChild(item);
       });
     }
 
-    // Function to download the speech audio as an MP3 (for ResponsiveVoice API Premium)
-    function downloadAudio(text, voice) {
-      responsiveVoice.speak(text, voice, {
-        onend: () => {
-          // To simulate download, we would normally integrate with a paid API that supports file export
-          alert('Audio is ready to download (requires premium API).');
-        }
-      });
-    }
-
-    // Event listener for 'Speak' button
     speakBtn.addEventListener('click', () => {
       const text = textInput.value.trim();
-      if (text !== '') {
-        speakText(text, selectedVoice);
-        downloadBtn.style.display = "block"; // Show download button after speaking
-      } else {
+      if (!text) {
         alert('Please enter some text to speak.');
+        return;
       }
+
+      stopAllSpeech();
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      speechSynthesis.speak(utterance);
     });
 
-    // Event listener for 'Download' button
-    downloadBtn.addEventListener('click', () => {
-      const text = textInput.value.trim();
-      if (text !== '') {
-        downloadAudio(text, selectedVoice);
-      }
-    });
-
-    // Event listener for 'Voice Selection' dropdown
-    voiceSelect.addEventListener('change', (e) => {
-      selectedVoice = e.target.value;
-    });
-
-    // Event listener for 'Mic Preview' button
-    micBtn.addEventListener('click', () => {
-      const text = textInput.value.trim();
-      if (text !== '') {
-        speakText(text, selectedVoice);
-      } else {
-        alert('Please enter some text to preview.');
-      }
-    });
+    speechSynthesis.onvoiceschanged = renderVoices;
   </script>
+
 </body>
 </html>
