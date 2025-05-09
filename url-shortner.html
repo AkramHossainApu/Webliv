@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>URL Shortener</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #101c27;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #1f2d3d;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00a8ff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0090dd;
+    }
+
+    #shortenedURL {
+      margin-top: 20px;
+      word-wrap: break-word;
+      background: #0e1a25;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: all;
+      transition: background 0.3s;
+    }
+
+    #shortenedURL:hover {
+      background: #0c141e;
+    }
+
+    .error {
+      color: #ff6b6b;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 URL Shortener</h1>
+    <input type="text" id="urlInput" placeholder="Paste a long URL here..." />
+    <button onclick="shortenURL()">Shorten URL</button>
+    <p id="shortenedURL" onclick="copyToClipboard(this)" title="Click to copy"></p>
+    <p id="errorMessage" class="error"></p>
+  </div>
+
+  <script>
+    async function shortenURL() {
+      const url = document.getElementById('urlInput').value.trim();
+      const resultEl = document.getElementById('shortenedURL');
+      const errorEl = document.getElementById('errorMessage');
+      resultEl.textContent = '';
+      errorEl.textContent = '';
+
+      if (!url) {
+        errorEl.textContent = 'Please enter a valid URL.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://api.shrtco.de/v2/shorten?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        if (data.ok) {
+          resultEl.textContent = data.result.full_short_link;
+        } else {
+          errorEl.textContent = 'Error: ' + data.error || 'Failed to shorten URL.';
+        }
+      } catch (error) {
+        errorEl.textContent = 'Something went wrong. Please try again.';
+      }
+    }
+
+    function copyToClipboard(element) {
+      const text = element.textContent;
+      if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+          element.textContent = "✅ Copied to clipboard!";
+          setTimeout(() => {
+            element.textContent = text;
+          }, 1500);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
