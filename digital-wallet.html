@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Wallet - WebLiv</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --background-color: #101c27;
+      --card-color: #1a2a3a;
+      --text-color: #ffffff;
+      --border-radius: 10px;
+      --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--background-color);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-top: 10px;
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .balance-card {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .balance-title {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+
+    .action-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 30%;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .action-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .action-button i {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .action-label {
+      font-size: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 25px 0 15px;
+    }
+
+    .transactions {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      padding: 5px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .transaction {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .transaction:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 15px;
+    }
+
+    .transaction-details {
+      flex: 1;
+    }
+
+    .transaction-name {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .transaction-date {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .transaction-amount {
+      font-weight: 600;
+    }
+
+    .amount-positive {
+      color: #2ecc71;
+    }
+
+    .amount-negative {
+      color: #e74c3c;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--card-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 15px 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .nav-item.active {
+      color: var(--primary-color);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: var(--card-color);
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 400px;
+      padding: 25px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: var(--text-color);
+      font-size: 16px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .modal-button {
+      padding: 12px 0;
+      width: 48%;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .cancel-button {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+    }
+
+    .confirm-button {
+      background-color: var(--primary-color);
+      color: var(--text-color);
+    }
+
+    .confirm-button:hover {
+      background-color: var(--secondary-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="back-button" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="app-title">Digital Wallet</div>
+      <div class="profile-icon">
+        <i class="fas fa-user"></i>
+      </div>
+    </header>
+
+    <div class="balance-card">
+      <div class="balance-title">Total Balance</div>
+      <div class="balance-amount">$2,458.50</div>
+      
+      <div class="card-actions">
+        <button class="action-button" onclick="openModal('send')">
+          <i class="fas fa-paper-plane"></i>
+          <span class="action-label">Send</span>
+        </button>
+        <button class="action-button" onclick="openModal('receive')">
+          <i class="fas fa-download"></i>
+          <span class="action-label">Receive</span>
+        </button>
+        <button class="action-button" onclick="openModal('topup')">
+          <i class="fas fa-plus"></i>
+          <span class="action-label">Top Up</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="section-title">Recent Transactions</div>
+    <div class="transactions">
+      <div class="transaction">
+        <div class="transaction-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Online Store</div>
+          <div class="transaction-date">Today, 2:45 PM</div>
+        </div>
+        <div class="transaction-amount amount-negative">-$45.00</div>
+      </div>
+      
+      <div class="transaction">
+        <div class="transaction-icon">
+          <i class="fas fa-mug-hot"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Coffee Shop</div>
+          <div class="transaction-date">Yesterday, 9:15 AM</div>
+        </div>
+        <div class="transaction-amount amount-negative">-$5.75</div>
+      </div>
+      
+      <div class="transaction">
+        <div class="transaction-icon">
+          <i class="fas fa-download"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Deposit</div>
+          <div class="transaction-date">May 15, 2023</div>
+        </div>
+        <div class="transaction-amount amount-positive">+$250.00</div>
+      </div>
+      
+      <div class="transaction">
+        <div class="transaction-icon">
+          <i class="fas fa-utensils"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Restaurant</div>
+          <div class="transaction-date">May 14, 2023</div>
+        </div>
+        <div class="transaction-amount amount-negative">-$32.40</div>
+      </div>
+      
+      <div class="transaction">
+        <div class="transaction-icon">
+          <i class="fas fa-paper-plane"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Transfer to John</div>
+          <div class="transaction-date">May 12, 2023</div>
+        </div>
+        <div class="transaction-amount amount-negative">-$120.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-chart-line"></i>
+      <span>Stats</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-credit-card"></i>
+      <span>Cards</span>
+    </a>
+    <a href="#" class="nav-item">
+      <i class="fas fa-cog"></i>
+      <span>Settings</span>
+    </a>
+  </div>
+
+  <!-- Send Money Modal -->
+  <div id="sendModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Send Money</div>
+      <div class="form-group">
+        <label class="form-label">Recipient</label>
+        <input type="text" class="form-input" placeholder="Email or phone number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount</label>
+        <input type="number" class="form-input" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note (optional)</label>
+        <input type="text" class="form-input" placeholder="What's this for?">
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button cancel-button" onclick="closeModal('send')">Cancel</button>
+        <button class="modal-button confirm-button" onclick="sendMoney()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Receive Money Modal -->
+  <div id="receiveModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Receive Money</div>
+      <div style="text-align: center; margin: 30px 0;">
+        <div style="background: white; display: inline-block; padding: 15px; border-radius: 10px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=wallet:user123" alt="QR Code" width="150" height="150">
+        </div>
+        <p style="margin-top: 15px; font-size: 14px;">Scan this QR code to send money to this wallet</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Wallet ID</label>
+        <div style="display: flex;">
+          <input type="text" class="form-input" value="wallet:user123" readonly style="flex: 1;">
+          <button style="background: var(--primary-color); border: none; border-radius: 5px; margin-left: 10px; padding: 0 15px; cursor: pointer;">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button confirm-button" style="width: 100%;" onclick="closeModal('receive')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Up Modal -->
+  <div id="topupModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-title">Top Up Wallet</div>
+      <div class="form-group">
+        <label class="form-label">Amount</label>
+        <input type="number" class="form-input" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <select class="form-input">
+          <option>Credit/Debit Card</option>
+          <option>Bank Transfer</option>
+          <option>PayPal</option>
+        </select>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button cancel-button" onclick="closeModal('topup')">Cancel</button>
+        <button class="modal-button confirm-button" onclick="topUpWallet()">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to open modals
+    function openModal(type) {
+      if (type === 'send') {
+        document.getElementById('sendModal').style.display = 'flex';
+      } else if (type === 'receive') {
+        document.getElementById('receiveModal').style.display = 'flex';
+      } else if (type === 'topup') {
+        document.getElementById('topupModal').style.display = 'flex';
+      }
+    }
+
+    // Function to close modals
+    function closeModal(type) {
+      if (type === 'send') {
+        document.getElementById('sendModal').style.display = 'none';
+      } else if (type === 'receive') {
+        document.getElementById('receiveModal').style.display = 'none';
+      } else if (type === 'topup') {
+        document.getElementById('topupModal').style.display = 'none';
+      }
+    }
+
+    // Function to handle sending money
+    function sendMoney() {
+      // In a real app, this would connect to a backend service
+      alert('Money sent successfully!');
+      closeModal('send');
+      
+      // Add the transaction to the list (for demo purposes)
+      const transactions = document.querySelector('.transactions');
+      const newTransaction = document.createElement('div');
+      newTransaction.className = 'transaction';
+      newTransaction.innerHTML = `
+        <div class="transaction-icon">
+          <i class="fas fa-paper-plane"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Transfer to Recipient</div>
+          <div class="transaction-date">Just now</div>
+        </div>
+        <div class="transaction-amount amount-negative">-$XX.XX</div>
+      `;
+      
+      // Insert at the top
+      transactions.insertBefore(newTransaction, transactions.firstChild);
+      
+      // Update balance (for demo purposes)
+      updateBalance(-50);
+    }
+
+    // Function to handle topping up wallet
+    function topUpWallet() {
+      // In a real app, this would connect to a payment processor
+      alert('Wallet topped up successfully!');
+      closeModal('topup');
+      
+      // Add the transaction to the list (for demo purposes)
+      const transactions = document.querySelector('.transactions');
+      const newTransaction = document.createElement('div');
+      newTransaction.className = 'transaction';
+      newTransaction.innerHTML = `
+        <div class="transaction-icon">
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="transaction-details">
+          <div class="transaction-name">Top Up</div>
+          <div class="transaction-date">Just now</div>
+        </div>
+        <div class="transaction-amount amount-positive">+$XX.XX</div>
+      `;
+      
+      // Insert at the top
+      transactions.insertBefore(newTransaction, transactions.firstChild);
+      
+      // Update balance (for demo purposes)
+      updateBalance(100);
+    }
+
+    // Function to update balance (for demo purposes)
+    function updateBalance(amount) {
+      const balanceElement = document.querySelector('.balance-amount');
+      const currentBalance = parseFloat(balanceElement.textContent.replace('$', '').replace(',', ''));
+      const newBalance = currentBalance + amount;
+      
+      // Format with commas
+      balanceElement.textContent = '$' + newBalance.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const sendModal = document.getElementById('sendModal');
+      const receiveModal = document.getElementById('receiveModal');
+      const topupModal = document.getElementById('topupModal');
+      
+      if (event.target === sendModal) {
+        sendModal.style.display = 'none';
+      } else if (event.target === receiveModal) {
+        receiveModal.style.display = 'none';
+      } else if (event.target === topupModal) {
+        topupModal.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
