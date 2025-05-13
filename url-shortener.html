@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>URL Shortener</title>
+  <title>WebLiv | URL Shortener</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
@@ -18,10 +18,31 @@
       color: #fff;
       font-family: 'Poppins', sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       padding: 20px;
+    }
+    
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .back-button a {
+      text-decoration: none;
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .back-button a:hover {
+      background-color: #c0392b;
     }
 
     .container {
@@ -86,6 +107,10 @@
   </style>
 </head>
 <body>
+  <div class="back-button">
+    <a href="index.html">&#8592; Back to Home</a>
+  </div>
+  
   <div class="container">
     <h1>🔗 URL Shortener</h1>
     <input type="text" id="urlInput" placeholder="Paste a long URL here..." />
