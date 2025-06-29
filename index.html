@@ -62,12 +62,17 @@
     }
     .button-list {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
       gap: 18px;
       width: 100%;
+      justify-content: center;
     }
     .button {
-      width: 100%;
+      flex: 1 1 45%;
+      min-width: 180px;
+      max-width: 220px;
+      margin: 0 4px;
       padding: 16px 0;
       background: linear-gradient(90deg, #4fd1c5 0%, #3498db 100%);
       border: none;
@@ -91,6 +96,18 @@
       background: linear-gradient(90deg, #3498db 0%, #4fd1c5 100%);
       transform: translateY(-2px) scale(1.03);
       box-shadow: 0 6px 24px rgba(52, 152, 219, 0.18);
+    }
+    @media (max-width: 700px) {
+      .button-list {
+        flex-direction: column;
+        gap: 18px;
+      }
+      .button {
+        min-width: unset;
+        max-width: unset;
+        width: 100%;
+        margin: 0;
+      }
     }
     @media (max-width: 500px) {
       .container {
