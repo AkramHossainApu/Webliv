@@ -5,67 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebLiv</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: #101c27;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      min-height: 100vh;
       font-family: 'Poppins', sans-serif;
-      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+    }
+    .container {
+      background: #181f2a;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+      padding: 48px 36px 36px 36px;
+      display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
+      min-width: 340px;
+      max-width: 95vw;
+      gap: 32px;
+    }
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo-icon {
+      font-size: 48px;
+      color: #4fd1c5;
+      background: #232526;
+      border-radius: 50%;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(79, 209, 197, 0.15);
+    }
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+      margin-top: 8px;
+      margin-bottom: 0;
+    }
+    .subtitle {
+      font-size: 1.05rem;
+      color: #b0b8c1;
+      margin-bottom: 0;
+      margin-top: 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .button-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
     }
     .button {
-      padding: 15px 30px;
-      background-color: #3498db;
+      width: 100%;
+      padding: 16px 0;
+      background: linear-gradient(90deg, #4fd1c5 0%, #3498db 100%);
       border: none;
-      border-radius: 5px;
+      border-radius: 12px;
       color: #fff;
-      font-size: 18px;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
-      transition: background 0.3s ease;
-    }
-    .button:hover {
-      background-color: #2980b9;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
+      transition: transform 0.13s, box-shadow 0.13s, background 0.25s;
+      outline: none;
     }
     .button i {
-      font-size: 20px;
+      font-size: 1.3em;
+    }
+    .button:hover, .button:focus {
+      background: linear-gradient(90deg, #3498db 0%, #4fd1c5 100%);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(52, 152, 219, 0.18);
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 24px 8px 18px 8px;
+        min-width: unset;
+      }
+      .title {
+        font-size: 1.3rem;
+      }
+      .button {
+        font-size: 1rem;
+        padding: 13px 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="logo"></div>
-
-  <!-- QR Code Generator Button -->
-  <button class="button" onclick="window.location.href='qr-code-generator.html'">
-    <i class="fas fa-qrcode"></i> QR Code Generator
-  </button>
-
-  <!-- Text to Speech Converter Button -->
-  <button class="button" onclick="window.location.href='text-to-speech.html'">
-    <i class="fas fa-volume-up"></i> Text to Speech
-  </button>
-
-  <!-- Image Compressor Button -->
-  <button class="button" onclick="window.location.href='image-compressor.html'">
-    <i class="fas fa-file-image"></i> Image Compressor
-  </button>
-
-  <!-- URL Shortener Button -->
-  <button class="button" onclick="window.location.href='url-shortener.html'">
-    <i class="fas fa-link"></i> URL Shortener
-  </button>
-
-  <!-- Digital Wallet Button -->
-  <button class="button" onclick="window.location.href='digital-wallet.html'">
-    <i class="fas fa-wallet"></i> Digital Wallet
-  </button>
+  <div class="container">
+    <div class="logo">
+      <span class="logo-icon"><i class="fas fa-cube"></i></span>
+      <h1 class="title">WebLiv</h1>
+      <p class="subtitle">Your Modern Web Toolkit</p>
+    </div>
+    <div class="button-list">
+      <button class="button" onclick="window.location.href='qr-code-generator.html'">
+        <i class="fas fa-qrcode"></i> QR Code Generator
+      </button>
+      <button class="button" onclick="window.location.href='text-to-speech.html'">
+        <i class="fas fa-volume-up"></i> Text to Speech
+      </button>
+      <button class="button" onclick="window.location.href='image-compressor.html'">
+        <i class="fas fa-file-image"></i> Image Compressor
+      </button>
+      <button class="button" onclick="window.location.href='url-shortener.html'">
+        <i class="fas fa-link"></i> URL Shortener
+      </button>
+      <button class="button" onclick="window.location.href='digital-wallet.html'">
+        <i class="fas fa-wallet"></i> Digital Wallet
+      </button>
+    </div>
+  </div>
 </body>
 </html>
