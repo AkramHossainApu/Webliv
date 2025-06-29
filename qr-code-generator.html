@@ -4,205 +4,164 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WebLiv | QR Code Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
   <style>
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      min-height: 100vh;
       font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-
-    body {
-      background-color: #101c27;
-      color: #fff;
+    .container {
+      background: #181f2a;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+      padding: 48px 36px 36px 36px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      min-height: 100vh;
+      min-width: 340px;
+      max-width: 95vw;
+      gap: 32px;
     }
-
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
+    .logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
     }
-
-    .back-button a {
-      text-decoration: none;
-      background-color: #e74c3c;
+    .logo-icon {
+      font-size: 40px;
+      color: #4fd1c5;
+      background: #232526;
+      border-radius: 50%;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(79, 209, 197, 0.15);
+    }
+    .title {
+      font-size: 1.5rem;
+      font-weight: 700;
       color: #fff;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 14px;
-      transition: background 0.3s ease;
+      letter-spacing: 1px;
+      margin-top: 8px;
+      margin-bottom: 0;
     }
-
-    .back-button a:hover {
-      background-color: #c0392b;
-    }
-
-    .container {
-      background: #ffffff;
-      color: #000;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      max-width: 400px;
-      width: 100%;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .container h1 {
-      font-size: 22px;
+    .subtitle {
+      font-size: 1.05rem;
+      color: #b0b8c1;
+      margin-bottom: 0;
+      margin-top: 0;
       font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .back-button {
+      align-self: flex-start;
       margin-bottom: 10px;
     }
-
-    .container p {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 20px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 12px 15px;
-      font-size: 16px;
-      border: 1px solid #ccc;
+    .back-button a {
+      text-decoration: none;
+      background: #e74c3c;
+      color: #fff;
+      padding: 10px 20px;
       border-radius: 8px;
-      outline: none;
-      margin-bottom: 15px;
-      transition: box-shadow 0.2s;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.3s;
     }
-
-    input[type="text"]:focus {
-      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+    .back-button a:hover {
+      background: #c0392b;
     }
-
-    button.generate-btn, button#downloadLink {
+    .form-section {
       width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      color: white;
-      margin-top: 10px;
-      transition: background 0.3s ease;
-    }
-
-    button.generate-btn {
-      background-color: #3498db;
-    }
-
-    button.generate-btn:hover {
-      background-color: #2980b9;
-    }
-
-    button#downloadLink {
-      background-color: #2ecc71;
-      display: none;
-    }
-
-    button#downloadLink:hover {
-      background-color: #27ae60;
-    }
-
-    .qr-code {
-      margin-top: 20px;
-      display: none;
-      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
       align-items: center;
     }
-
-    .qr-code img {
-      max-width: 200px;
+    .form-section input[type="text"] {
       width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+      background: #232526;
+      color: #fff;
+      margin-bottom: 8px;
     }
-
-    @media (max-width: 480px) {
+    .form-section button {
+      width: 100%;
+      padding: 14px 0;
+      background: linear-gradient(90deg, #4fd1c5 0%, #3498db 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
+      transition: transform 0.13s, box-shadow 0.13s, background 0.25s;
+      outline: none;
+    }
+    .form-section button:hover, .form-section button:focus {
+      background: linear-gradient(90deg, #3498db 0%, #4fd1c5 100%);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(52, 152, 219, 0.18);
+    }
+    .qr-result {
+      margin-top: 18px;
+      background: #232526;
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    @media (max-width: 500px) {
       .container {
-        padding: 20px;
+        padding: 24px 8px 18px 8px;
+        min-width: unset;
       }
-
-      button.generate-btn,
-      button#downloadLink {
-        font-size: 15px;
-        padding: 12px;
+      .title {
+        font-size: 1.1rem;
+      }
+      .form-section button {
+        font-size: 1rem;
+        padding: 11px 0;
       }
     }
   </style>
 </head>
 <body>
-
-  <div class="back-button">
-    <a href="index.html">&#8592; Back to Home</a>
-  </div>
-
   <div class="container">
-    <h1>QR Code Generator</h1>
-    <p>Enter text or URL to generate your QR code</p>
-
-    <input type="text" id="qrInput" placeholder="Type something...">
-    <button class="generate-btn">Generate QR Code</button>
-
-    <div class="qr-code">
-      <img src="" alt="QR Code" id="qrImage">
+    <div class="back-button"><a href="index.html"><i class="fas fa-arrow-left"></i> Back</a></div>
+    <div class="logo">
+      <span class="logo-icon"><i class="fas fa-qrcode"></i></span>
+      <h1 class="title">QR Code Generator</h1>
+      <p class="subtitle">Create QR codes instantly</p>
     </div>
-
-    <button id="downloadLink">Download QR Code</button>
+    <form class="form-section" id="qrForm" autocomplete="off">
+      <input type="text" id="qrText" placeholder="Enter text or URL" required />
+      <button type="submit"><i class="fas fa-qrcode"></i> Generate QR Code</button>
+    </form>
+    <div id="qrResult" class="qr-result" style="display:none;"></div>
   </div>
-
   <script>
-    const input = document.getElementById('qrInput');
-    const generateBtn = document.querySelector('.generate-btn');
-    const qrCodeDiv = document.querySelector('.qr-code');
-    const qrImg = document.getElementById('qrImage');
-    const downloadBtn = document.getElementById('downloadLink');
-    let qrURL = "";
-
-    generateBtn.addEventListener('click', () => {
-      const value = input.value.trim();
-      if (!value) return alert("Please enter text or URL");
-
-      qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(value)}`;
-      qrImg.src = qrURL;
-
-      qrImg.onload = () => {
-        qrCodeDiv.style.display = 'flex';
-        downloadBtn.style.display = 'block';
-      };
-    });
-
-    downloadBtn.addEventListener('click', async () => {
-      try {
-        const response = await fetch(qrURL);
-        const blob = await response.blob();
-        const objectURL = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = objectURL;
-        const safeName = input.value.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        link.download = `${safeName || "qr_code"}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(objectURL);
-      } catch (error) {
-        alert("Error downloading the QR code.");
-      }
-    });
-
-    input.addEventListener('input', () => {
-      if (!input.value.trim()) {
-        qrCodeDiv.style.display = 'none';
-        downloadBtn.style.display = 'none';
-      }
+    const qrForm = document.getElementById('qrForm');
+    const qrText = document.getElementById('qrText');
+    const qrResult = document.getElementById('qrResult');
+    qrForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = qrText.value.trim();
+      if (!text) return;
+      qrResult.style.display = 'block';
+      qrResult.innerHTML = `<img src='https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=200x200' alt='QR Code' /><div style='color:#fff;'>${text}</div>`;
     });
   </script>
-
 </body>
 </html>
