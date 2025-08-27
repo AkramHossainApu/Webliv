@@ -1,0 +1,66 @@
+url-encoder.html<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Encoder / Decoder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Webliv</a>
+        </div>
+    </nav>
+    <div class="container py-5">
+        <h1 class="mb-4 text-center">URL Encoder / Decoder</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="urlInput" class="form-label">Enter text or URL:</label>
+                            <textarea class="form-control" id="urlInput" rows="4" placeholder="Enter text or URL"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="urlOutput" class="form-label">Output:</label>
+                            <textarea class="form-control" id="urlOutput" rows="4" readonly></textarea>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button id="encodeBtn" class="btn btn-primary">Encode</button>
+                            <button id="decodeBtn" class="btn btn-secondary">Decode</button>
+                            <button id="copyBtn" class="btn btn-success">Copy Output</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const encodeBtn = document.getElementById('encodeBtn');
+        const decodeBtn = document.getElementById('decodeBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        encodeBtn.addEventListener('click', () => {
+            const input = document.getElementById('urlInput').value;
+            document.getElementById('urlOutput').value = encodeURIComponent(input);
+        });
+        decodeBtn.addEventListener('click', () => {
+            const input = document.getElementById('urlInput').value;
+            try {
+                document.getElementById('urlOutput').value = decodeURIComponent(input);
+            } catch (e) {
+                document.getElementById('urlOutput').value = 'Invalid encoded string';
+            }
+        });
+        copyBtn.addEventListener('click', () => {
+            const output = document.getElementById('urlOutput');
+            navigator.clipboard.writeText(output.value).then(() => {
+                alert('Output copied to clipboard');
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
