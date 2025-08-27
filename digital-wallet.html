@@ -17,7 +17,8 @@
     <h1 class="mb-4">Digital Wallet</h1>
     <div class="card shadow-sm">
       <div class="card-body">
-        <h4 class="card-title">Balance</h4>
+   
+   <h4  class="card-title">Balance</h4>
         <p class="display-6 fw-bold">$<span id="balance">0.00</span></p>
         <div class="mb-3">
           <button class="btn btn-success me-2" onclick="addMoney()">Add Money</button>
@@ -52,7 +53,13 @@
         updateUI();
       }
     }
-    updateUI();
+   
+    function resetBalance() {
+  balance = 0;
+  transactions = [];
+  updateUI();
+}
+updateUI();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
