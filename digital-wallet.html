@@ -1,196 +1,46 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebLiv | Digital Wallet</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #232526 0%, #414345 100%);
-      min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      background: #181f2a;
-      border-radius: 24px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
-      padding: 48px 36px 36px 36px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 340px;
-      max-width: 95vw;
-      gap: 32px;
-    }
-    .logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo-icon {
-      font-size: 40px;
-      color: #4fd1c5;
-      background: #232526;
-      border-radius: 50%;
-      padding: 12px;
-      box-shadow: 0 2px 8px rgba(79, 209, 197, 0.15);
-    }
-    .title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 1px;
-      margin-top: 8px;
-      margin-bottom: 0;
-    }
-    .subtitle {
-      font-size: 1.05rem;
-      color: #b0b8c1;
-      margin-bottom: 0;
-      margin-top: 0;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .back-button {
-      align-self: flex-start;
-      margin-bottom: 10px;
-    }
-    .back-button a {
-      text-decoration: none;
-      background: #e74c3c;
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-    .back-button a:hover {
-      background: #c0392b;
-    }
-    .wallet-section {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      align-items: center;
-    }
-    .wallet-balance {
-      background: #232526;
-      color: #4fd1c5;
-      border-radius: 12px;
-      padding: 18px 32px;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 8px rgba(79, 209, 197, 0.10);
-    }
-    .wallet-actions {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      justify-content: center;
-    }
-    .wallet-actions button {
-      flex: 1;
-      padding: 12px 0;
-      background: linear-gradient(90deg, #4fd1c5 0%, #3498db 100%);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
-      transition: transform 0.13s, box-shadow 0.13s, background 0.25s;
-      outline: none;
-    }
-    .wallet-actions button:hover, .wallet-actions button:focus {
-      background: linear-gradient(90deg, #3498db 0%, #4fd1c5 100%);
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 6px 24px rgba(52, 152, 219, 0.18);
-    }
-    .transaction-list {
-      width: 100%;
-      margin-top: 18px;
-      background: #232526;
-      border-radius: 12px;
-      padding: 18px;
-      color: #fff;
-      max-height: 180px;
-      overflow-y: auto;
-      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.10);
-    }
-    .transaction-list h3 {
-      margin: 0 0 10px 0;
-      font-size: 1.1rem;
-      color: #4fd1c5;
-    }
-    .transaction-list ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .transaction-list li {
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-    @media (max-width: 500px) {
-      .container {
-        padding: 24px 8px 18px 8px;
-        min-width: unset;
-      }
-      .title {
-        font-size: 1.1rem;
-      }
-      .wallet-actions button {
-        font-size: 1rem;
-        padding: 10px 0;
-      }
-    }
-  </style>
+  <title>Digital Wallet - Webliv</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="back-button"><a href="index.html"><i class="fas fa-arrow-left"></i> Back</a></div>
-    <div class="logo">
-      <span class="logo-icon"><i class="fas fa-wallet"></i></span>
-      <h1 class="title">Digital Wallet</h1>
-      <p class="subtitle">Manage your balance and transactions</p>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Webliv</a>
     </div>
-    <div class="wallet-section">
-      <div class="wallet-balance">Balance: $<span id="balance">0.00</span></div>
-      <div class="wallet-actions">
-        <button onclick="addMoney()"><i class="fas fa-plus"></i> Add</button>
-        <button onclick="removeMoney()"><i class="fas fa-minus"></i> Spend</button>
-      </div>
-      <div class="transaction-list">
-        <h3>Transactions</h3>
-        <ul id="transactions"></ul>
+  </nav>
+  <main class="container py-5">
+    <h1 class="mb-4">Digital Wallet</h1>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="card-title">Balance</h4>
+        <p class="display-6 fw-bold">$<span id="balance">0.00</span></p>
+        <div class="mb-3">
+          <button class="btn btn-success me-2" onclick="addMoney()">Add Money</button>
+          <button class="btn btn-danger" onclick="removeMoney()">Spend Money</button>
+        </div>
+        <h5 class="mt-4">Transactions</h5>
+        <ul class="list-group" id="transactions"></ul>
       </div>
     </div>
-  </div>
+  </main>
   <script>
     let balance = 0;
     let transactions = [];
     function updateUI() {
       document.getElementById('balance').textContent = balance.toFixed(2);
       const list = document.getElementById('transactions');
-      list.innerHTML = transactions.map(t => `<li>${t}</li>`).join('');
+      list.innerHTML = transactions.map(t => '<li class="list-group-item">' + t + '</li>').join('');
     }
     function addMoney() {
       const amount = parseFloat(prompt('Enter amount to add:'));
       if (!isNaN(amount) && amount > 0) {
         balance += amount;
-        transactions.unshift(`+ $${amount.toFixed(2)}`);
+        transactions.unshift('+$' + amount.toFixed(2));
         updateUI();
       }
     }
@@ -198,11 +48,12 @@
       const amount = parseFloat(prompt('Enter amount to spend:'));
       if (!isNaN(amount) && amount > 0 && amount <= balance) {
         balance -= amount;
-        transactions.unshift(`- $${amount.toFixed(2)}`);
+        transactions.unshift('-$' + amount.toFixed(2));
         updateUI();
       }
     }
     updateUI();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
