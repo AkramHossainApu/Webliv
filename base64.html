@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encoder & Decoder</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Webliv</a>
+  </div>
+</nav>
+<div class="container py-5">
+  <h1 class="text-center mb-4">Base64 Encoder/Decoder</h1>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="mb-3">
+        <label for="textInput" class="form-label">Input</label>
+        <textarea class="form-control" id="textInput" rows="6" placeholder="Enter text or Base64 string"></textarea>
+      </div>
+      <button id="encodeBtn" class="btn btn-primary me-2">Encode</button>
+      <button id="decodeBtn" class="btn btn-secondary">Decode</button>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="output" class="form-label">Output</label>
+        <textarea class="form-control" id="output" rows="6" readonly></textarea>
+      </div>
+      <button id="copyBtn" class="btn btn-success">Copy Output</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const textInput = document.getElementById('textInput');
+const output = document.getElementById('output');
+document.getElementById('encodeBtn').addEventListener('click', () => {
+  try {
+    output.value = btoa(textInput.value);
+  } catch (err) {
+    output.value = 'Error encoding input.';
+  }
+});
+document.getElementById('decodeBtn').addEventListener('click', () => {
+  try {
+    output.value = atob(textInput.value);
+  } catch (err) {
+    output.value = 'Error decoding input.';
+  }
+});
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if (output.value) {
+    navigator.clipboard.writeText(output.value);
+    const btn = document.getElementById('copyBtn');
+    const original = btn.innerText;
+    btn.innerText = 'Copied!';
+    setTimeout(() => btn.innerText = original, 1500);
+  }
+});
+</script>
+</body>
+</html>
