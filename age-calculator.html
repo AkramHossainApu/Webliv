@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Webliv</a>
+  </div>
+</nav>
+<div class="container py-5">
+  <h1 class="text-center mb-4">Age Calculator</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <form id="ageForm">
+            <div class="mb-3">
+              <label for="birthDate" class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="birthDate" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Calculate Age</button>
+          </form>
+          <div id="ageResult" class="mt-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.getElementById('ageForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const birthDateValue = document.getElementById('birthDate').value;
+  if (!birthDateValue) return;
+  const birthDate = new Date(birthDateValue);
+  const today = new Date();
+  let years = today.getFullYear() - birthDate.getFullYear();
+  let months = today.getMonth() - birthDate.getMonth();
+  let days = today.getDate() - birthDate.getDate();
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+  document.getElementById('ageResult').innerHTML =
+    '<p class="fw-bold">You are ' + years + ' years, ' + months + ' months and ' + days + ' days old.</p>';
+});
+</script>
+</body>
+</html>
